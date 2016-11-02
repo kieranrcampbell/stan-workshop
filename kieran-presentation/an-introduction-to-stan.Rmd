@@ -1,0 +1,207 @@
+---
+title: "An Introduction to Stan"
+author: "Kieran Campbell"
+date: "18 November 2016"
+output: 
+  ioslides_presentation:
+    smaller: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align='center', 
+                      fig.width = 4, fig.height = 3,
+                      message = FALSE, cache = TRUE)
+```
+
+## Overview
+
+- Modelling vs inference
+- Who is Stan?
+- The structure of a Stan program
+- Model checking & diagnostics
+
+## Slide with Bullets
+
+- Bullet 1
+- Bullet 2
+- Bullet 3
+
+## Example: linear regression
+
+
+```{r make-synthetic, message = FALSE}
+library(ggplot2)
+
+N <- 100
+x <- runif(N)
+y <- -1 + 3 * x + rnorm(N, 0, 0.2)
+qplot(x, y)
+```
+
+## Linear regression
+
+Linear models:
+
+$$
+y_i = \beta_0 + \beta_1 x_i + \epsilon_i, 
+$$
+
+Noise has zero mean and uncorrelated with $x_i$ (homoskedastic):
+
+$$
+\epsilon_i \sim N(0, \tau^{-1})
+$$
+
+Bayesian prior structure:
+
+$$
+\beta_0, \beta_1 \sim N(0, \sigma^2_0)
+$$
+$$
+\tau \sim \text{Gamma}(a, b)
+$$
+
+_Remember_:
+<center>
+$$ \tau = \frac{1}{\sigma^2}$$
+</center>
+
+## Linear regression: priors
+
+Let's (pretend?) we don't know much:
+
+$$
+\beta_0, \beta_1 \sim N(0, 100^2)
+$$
+
+```{r beta_prior}
+qplot(rnorm(1000, 0, 100))
+```
+
+## Linear regression: priors (cont)
+
+$$
+\tau \sim \text{Gamma}(0.01, 0.01)
+$$
+
+```{r tau_prior}
+qplot(rgamma(1000, 0.1, 0.1)) 
+```
+
+Beware Gamma distribution parametrisation (shape-rate-scale)
+
+## Example: linear regression
+
+<small>
+```{r lin-reg-stan-model}
+model_str <- '
+data {
+  int<lower = 0> N;
+  real y[N];
+  real x[N];
+}
+parameters {
+  real beta0;
+  real beta1;
+  real<lower = 0> tau;
+}
+model {
+  beta0 ~ normal(0, 100);
+  beta1 ~ normal(0, 100);
+  tau ~ gamma(0.1, 0.1);
+  for(i in 1:N) {
+    y[i] ~ normal(beta0 + beta1 * x[i], 1 / sqrt(tau));
+  }
+}
+'
+```
+
+</small>
+
+
+
+## Example: linear regression
+
+Compile Stan model:
+
+```{r stan-model, include = FALSE}
+library(rstan)
+linear_model <- stan_model(model_code = model_str)
+```
+
+```{r stan-model-display, eval = FALSE}
+library(rstan)
+linear_model <- stan_model(model_code = model_str)
+```
+
+Put data into list:
+
+```{r data-to-list}
+data_list <- list(x = x, y = y)
+```
+
+Inference:
+
+```{r stan-inference}
+fit <- sampling(linear_model,
+                data = data_list, 
+                iter = 4000, # Number of MCMC iterations
+                warmup = 2000, # How many iterations at beginning to ignore
+                chains = 4,  # Number of chains to sample
+                thin = 4) # Only keep every fourth sample
+```
+
+## Diagnostics
+
+```{r ll, fig.width = 7, fig.height = 3}
+stan_trace(fit, "lp__")
+```
+
+## Diagnostics (cont)
+
+Bad convergence:
+
+```{r bad-convergence, echo = FALSE, fig.width = 7, fig.height = 3}
+library(tidyverse)
+bad_conv <- replicate(4, cumsum(rnorm(1000)))
+as_data_frame(bad_conv) %>% mutate(iter = 1:1000) %>% 
+  gather(chain, lp__, -iter) %>% 
+  arrange(iter) %>% 
+  ggplot(aes(x = iter, y = lp__, color = chain)) + geom_line()
+```
+
+## Diagnostics (cont)
+
+```{r stan-trace-pars, fig.width = 7, fig.height = 3}
+stan_trace(fit)
+```
+
+## Diagnostics: autocorrelation
+
+```{r stan-autocor, fig.width = 3, fig.height = 3}
+stan_ac(fit, "lp__")
+```
+
+## Diagnostics: autocorrelation
+
+```{r stan-autocor-2, fig.width = 6, fig.height = 3}
+stan_ac(fit)
+```
+
+## Diagnostics: effective sample size
+
+```{r stan-ess}
+stan_ess(fit)
+```
+
+## Diagnostics: Monte carlo standard error
+
+```{r stan-mcse}
+stan_mcse(fit)
+```
+
+## Diagnostics: Gelman's R-hat
+
+```{r stan-rhat}
+stan_rhat(fit)
+```
