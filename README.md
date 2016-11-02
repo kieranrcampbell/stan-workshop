@@ -12,8 +12,8 @@ You should be familiar with the basic workings of R.
 
 You should also have read about Bayesian Statistics as part of the pre-course exercise and be familiar with the following concepts:
 
-- random variable
-- basic rules of probability 
+- a random variable
+- tge basic rules of probability 
 - a probability distribution
 - Bayes' Rule
 - prior probability distributions
