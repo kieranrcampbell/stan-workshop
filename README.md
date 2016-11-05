@@ -30,6 +30,6 @@ Please install the following R packages:
 
 - ggplot2
 - Rstan
-
+- devtools
 
 
