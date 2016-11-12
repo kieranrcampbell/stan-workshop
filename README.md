@@ -17,11 +17,15 @@ Instructors: Justina Zurauskiene (JZ), Kieran Campbell (KC), Christopher Yau (CY
 
 > 11:30-12:30 Introduction to STAN (KC)
 
+> 12:30-13:30 Lunch
+
 > 13:30-17:00 Practical (JZ/KC)
 
 *Friday, 18 November, 2016*
 
 > 09:30-12:30 Practical Continuation (JZ/KC)
+
+> 12:30-13:30 Lunch
 
 > 13:30-14:30 [Talk] Professor Ahmed Ashour Ahmed, Ovarian Cancer Laboratory, Nuffield Department of Obstetrics and Gynaecology and the Weatherall Institute of Molecular Medicine
 
