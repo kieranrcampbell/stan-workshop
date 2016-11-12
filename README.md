@@ -27,9 +27,9 @@ Instructors: Justina Zurauskiene (JZ), Kieran Campbell (KC), Christopher Yau (CY
 
 > 12:30-13:30 Lunch
 
-> 13:30-14:30 [Talk] Professor Ahmed Ashour Ahmed, Ovarian Cancer Laboratory, Nuffield Department of Obstetrics and Gynaecology and the Weatherall Institute of Molecular Medicine
+> 13:30-14:30 [Talk] [Professor Ahmed Ashour Ahmed](https://www.obs-gyn.ox.ac.uk/research/ovarian-cancer), Ovarian Cancer Laboratory, Nuffield Department of Obstetrics and Gynaecology and the Weatherall Institute of Molecular Medicine
 
-> 14:30-15:30 [Talk] Dr Edward Morrisey, Group Leader in Computational Biology, Weatherall Institute of Molecular Medicine
+> 14:30-15:30 [Talk] [Dr Edward Morrisey](https://scholar.google.co.uk/citations?user=JsJ5DkAAAAAJ&hl=en), Group Leader in Computational Biology, Weatherall Institute of Molecular Medicine
 
 
 ## Pre-requisites
