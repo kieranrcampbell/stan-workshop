@@ -15,16 +15,34 @@ knitr::opts_chunk$set(echo = TRUE, fig.align='center',
 
 ## Overview
 
+<h1>
+
 - Modelling vs inference
 - Who is Stan?
 - The structure of a Stan program
 - Model checking & diagnostics
 
-## Slide with Bullets
+</h1>
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+## Modelling vs inference
+
+
+## Stan
+
+Building blocks of a Stan file:
+
+### Data
+
+What is the (fixed) data required?
+
+### Parameters
+What (uknown) parameters will we infer?
+
+### Model
+
+How do the parameters and data relate? Specified with probability density / mass functions
+
+Can also have `transformed data`, `transformed parameters` and `generated quantites`
 
 ## Example: linear regression
 
@@ -90,9 +108,134 @@ qplot(rgamma(1000, 0.1, 0.1))
 
 Beware Gamma distribution parametrisation (shape-rate-scale)
 
-## Example: linear regression
+## Linear regression in Stan
 
-<small>
+Two steps
+
+### 1. Write the model file
+
+What data we require, and how our model relates this data to the unknown parameters (and how the parameters related to each other)
+
+### 2. Inference
+
+Stan _does this for you_, but we still have various decisions to make: e.g. HMC vs SVI, how many iterations, etc
+
+## Constructing the model file: data
+
+Model file part 1: what data do we require?
+
+```{model-part, eval = FALSE}
+data {
+  int<lower = 0> N;
+  real y[N];
+  real x[N];
+}
+```
+
+Many different data types:
+
+* `vector`
+* `cov_mat`
+
+etc
+
+## Constructing the model file: parameters
+
+Model file part 2: what parameters do we have?
+
+$$ y_i = \beta_0 + \beta_1 x_i + \epsilon_i, \;\;\epsilon_i \sim \text{Normal}(0, \tau^{-1})$$
+
+Want to infer $\beta_0$, $\beta_1$ and $\tau$:
+
+```{parameterpart, eval = FALSE}
+parameters {
+  real beta0;
+  real beta1;
+  real<lower = 0> tau;
+}
+```
+
+Remember in Bayesian inference _there's no real difference between data and parameters!_ 
+
+So (almost) every statement in the data block is valid here too
+
+## Constructing the model file: model
+
+Model file part 3: how do the parameters relate to the data?
+
+$$ \tau \sim \text{Gamma}(a, b) \\
+\beta_0, \beta_1 \sim N(0, \sigma^2_0) \\
+ \epsilon_i \sim \text{Normal}(0, \tau^{-1}) \\
+y_i = \beta_0 + \beta_1 x_i + \epsilon_i$$
+
+This is encoded in Stan via:
+
+```{modelpart, eval = FALSE}
+model {
+  beta0 ~ normal(0, 100);
+  beta1 ~ normal(0, 100);
+  tau ~ gamma(0.1, 0.1);
+  for(i in 1:N) {
+    y[i] ~ normal(beta0 + beta1 * x[i], 1 / sqrt(tau));
+  }
+}
+```
+
+## Constructing the model file: model
+
+```{modelpart2, eval = FALSE}
+model {
+  beta0 ~ normal(0, 100);
+  beta1 ~ normal(0, 100);
+  tau ~ gamma(0.1, 0.1);
+  for(i in 1:N) {
+    y[i] ~ normal(beta0 + beta1 * x[i], 1 / sqrt(tau));
+  }
+}
+```
+
+General form: 
+
+```{randvarexample, eval = FALSE}
+random variable ~ distribution(more random variables)
+```
+
+This supports a wide range of distributions: 
+
+* `normal`
+* `gamma` 
+* `student`
+* `exponential`
+* many more...
+
+## Model file: some notes
+
+### 1. Supports in place transformations! (& costs CY money)
+
+```{example3, eval = FALSE}
+1 / tau ~ inv_gamma(...);
+```
+
+### 2. Iteration with `for` loops as per `R`
+
+```{iterexample, eval = FALSE}
+for(g in 1:G) {
+  ...
+}
+```
+
+### 3. Assignment
+
+Recently changed from `<-` to `=`. Useful for less-cluttered code, e.g.
+
+```{onthefly, eval = FALSE}
+real mu[N];
+for(i in 1:N) mu[i] = beta0 + beta1 * x[i];
+y[i] ~ normal(mu[i], 1 / sqrt(tau));
+```
+
+
+## Complete model
 ```{r lin-reg-stan-model}
 model_str <- '
 data {
@@ -116,13 +259,11 @@ model {
 '
 ```
 
-</small>
 
 
+## Part 2: Inference!
 
-## Example: linear regression
-
-Compile Stan model:
+### Step 1: compile the Stan model
 
 ```{r stan-model, include = FALSE}
 library(rstan)
@@ -134,13 +275,23 @@ library(rstan)
 linear_model <- stan_model(model_code = model_str)
 ```
 
-Put data into list:
+For simple models it's easy to pass the model specification as a string. For more complex models, it's better to store it as a separate file:
+
+```{r stan-model-from-file, eval = FALSE}
+complex_model <- stan_model("my_complex_model.stan")
+```
+
+## Part 2: Inference!
+
+### Step 2: run the model
+
+Put data into list format:
 
 ```{r data-to-list}
 data_list <- list(x = x, y = y)
 ```
 
-Inference:
+Inference using `sampling`:
 
 ```{r stan-inference}
 fit <- sampling(linear_model,
@@ -150,6 +301,54 @@ fit <- sampling(linear_model,
                 chains = 4,  # Number of chains to sample
                 thin = 4) # Only keep every fourth sample
 ```
+
+## Inference (cont)
+
+What does `sampling` return?
+
+```{r whatret}
+str(fit, max.level = 2)
+```
+
+## Inference (cont)
+
+How do you extract parameter estimates? Use `extract`!
+
+For $\beta_0$:
+
+```{r beta0}
+beta0_trace <- rstan::extract(fit, "beta0")$beta0
+str(beta0_trace)
+```
+
+Can get a posterior mean estimate using `mean` (multidimensional parameter -> `colMeans`):
+
+```{r beta0map}
+beta0_map <- mean(beta0_trace)
+beta0_map
+```
+
+## Inference (cont)
+
+How does this compare to the _truth_?
+
+```{r beta0-truth}
+qplot(beta0_trace, geom = 'density') +
+  geom_vline(xintercept = -1, colour = 'darkblue') +
+  geom_vline(xintercept = beta0_map, colour = 'darkred')
+```
+
+## Inference (cont)
+
+But we normally (never) know the truth (also Bayesians...)
+
+So examine MCMC diagnostics, in particular:
+
+- Traces of log-likelihood and parameters
+- Autocorrelation plots
+- Effective sample size
+- Monte Carlo standard error
+- Gelman's R-hat
 
 ## Diagnostics
 
@@ -205,3 +404,55 @@ stan_mcse(fit)
 ```{r stan-rhat}
 stan_rhat(fit)
 ```
+
+
+## Discrete parameters
+
+Stan can't do inference over discrete parameters (because can't compute gradient). However, in many cases we can marginalise them out:
+
+If $\theta$ is a continuous parameter and $\phi$ is discrete, normally target unnormalised density $p(x | \theta, \phi)p(\theta)p(\phi)$. Instead, target
+
+$$
+p(x | \theta)p(\theta) = \sum_{k \in \Omega(\phi)}
+p(x | \theta, \phi = k)p(\theta)p(\phi = k)
+$$
+
+### Messing with the log-likelihood directly
+
+Using `target += ` to manipulate the log-likelihood:
+
+```{targetmess, eval = FALSE}
+y[i] ~ normal(mu[i], 1 / sqrt(tau))
+```
+
+is entirely equivalent to
+
+```{targetmesss, eval = FALSE}
+target += normal(y[i] | mu[i], 1 / sqrt(tau))
+```
+
+The `|` is a recent syntax change to Stan.
+
+## Discrete parameters
+
+Example: finite mixture model
+
+The responsibility parameters (data sample $i$ belongs to cluster $k$ are discrete).
+
+```{discretemixexample, eval = FALSE}
+ parameters {
+      real y;
+} model {
+      target += log_sum_exp(log(0.3) + normal(y | -1, 2),
+                            log(0.7) + normal(y | 3 1));
+}
+```
+
+Life pro tip: use `log_sum_exp` wherever possible (and work with log probability densities).
+
+## Stochastic Variational Inference
+
+
+
+
+
