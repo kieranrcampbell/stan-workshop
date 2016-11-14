@@ -1,7 +1,7 @@
 ---
 title: "An Introduction to Stan"
 author: "Kieran Campbell"
-date: "18 November 2016"
+date: "17 November 2016"
 output: 
   ioslides_presentation:
     smaller: true
@@ -30,6 +30,26 @@ knitr::opts_chunk$set(echo = TRUE, fig.align='center',
 [kieranrcampbell.github.io/stan-workshop](https://kieranrcampbell.github.io/stan-workshop)
 
 
+## Brief Recap
+
+- Bayesian Statistics operates under a fundamentally different paradigm to classical (Frequentist) Statistics
+- Frequentist probability of an event occuring is given by the relative frequency in an infinite number of experiments
+- Frequentists have difficulty answering questions where experiments cannot be done, e.g. ``What is the probability that the world will end tomorrow?" 
+- Bayesian probability operates on a subjective belief basis: everything can be assigned a probability
+- That probability or belief might be personal to you
+- Is it a better paradigm? For many problems it is more flexible but certain types of ``M-open" problems (e.g. hypothesis testing) are trickier to handle. This is because Bayesian Statistics requires us to define the entire model space.
+
+The posterior distribution of $\theta$ given $X$ is given by:
+
+$$
+  p(\theta|X) = \frac{ p(X|\theta) p(\theta) }{ p(X) }
+$$
+
+The likelihood is the probability of seeing the data given a model and its parameters
+
+The prior is your personal belief of what the distribution of those parameters look like (before seeing data)
+
+The posterior is the probability distribution of those parameters (after seeing data)
 
 ## Modelling vs inference
 
