@@ -567,9 +567,9 @@ qplot(beta0_trace_vb, geom = 'density') +
 ## Resources
 
 - Bayesian Data Analysis 3
-- (mc-stan.org)[https://mc-stan.org]
-- (Loo)[http://mc-stan.org/interfaces/loo.html] leave one out cross-validation
-- (Rstanarm)[http://mc-stan.org/interfaces/rstanarm.html] applied regression modelling
+- [mc-stan.org](https://mc-stan.org)
+- [Loo](http://mc-stan.org/interfaces/loo.html) leave one out cross-validation
+- [Rstanarm](http://mc-stan.org/interfaces/rstanarm.html) applied regression modelling
 
 
 
