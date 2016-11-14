@@ -24,6 +24,13 @@ knitr::opts_chunk$set(echo = TRUE, fig.align='center',
 
 </h1>
 
+
+### Slides:
+
+[kieranrcampbell.github.io/stan-workshop](https://kieranrcampbell.github.io/stan-workshop)
+
+
+
 ## Modelling vs inference
 
 
@@ -338,11 +345,26 @@ qplot(beta0_trace, geom = 'density') +
   geom_vline(xintercept = beta0_map, colour = 'darkred')
 ```
 
-## Inference (cont)
+## MCMC diagnostics
 
-But we normally (never) know the truth (also Bayesians...)
+But we normally (never) know the truth...
 
-So examine MCMC diagnostics, in particular:
+...so examine MCMC diagnostics
+
+Issues with MCMC samplers:
+
+1. Not enough iterations -> unrepresentative of target distribution
+2. Correlated draws -> less precise than independent
+
+<div class = "red2">
+<center>
+Love MCMC diagnostics? BDA3 11.4
+</center>
+</div>
+
+
+## Practical MCMC diagnostics
+, in particular:
 
 - Traces of log-likelihood and parameters
 - Autocorrelation plots
@@ -350,13 +372,34 @@ So examine MCMC diagnostics, in particular:
 - Monte Carlo standard error
 - Gelman's R-hat
 
-## Diagnostics
+## Diagnostics: trace examination
+
+<div class="columns-2">
+  Bad: <br/>
+  <img src="./img/mixing-001.png" width="300" height="300" />
+
+  Good:
+  
+  <img src="img/multi-chains.svg" width="300" height="300" />
+  
+</div>
+
+<div class="centered">
+<font size="2">
+
+- http://jacobcvt12.github.io/2016/parallel-diagnostics.html
+- http://matstrand.com/guides/MCMC/
+
+</font>
+</div>
+
+## Diagnostics: trace examination
 
 ```{r ll, fig.width = 7, fig.height = 3}
 stan_trace(fit, "lp__")
 ```
 
-## Diagnostics (cont)
+## Diagnostics: trace examination
 
 Bad convergence:
 
@@ -366,14 +409,29 @@ bad_conv <- replicate(4, cumsum(rnorm(1000)))
 as_data_frame(bad_conv) %>% mutate(iter = 1:1000) %>% 
   gather(chain, lp__, -iter) %>% 
   arrange(iter) %>% 
-  ggplot(aes(x = iter, y = lp__, color = chain)) + geom_line()
+  ggplot(aes(x = iter, y = lp__, color = chain)) + geom_line() +
+  cowplot::theme_cowplot() + ylab("log-posterior") +
+  theme(axis.title.x = element_blank())
 ```
 
-## Diagnostics (cont)
+## Diagnostics: trace examination
 
 ```{r stan-trace-pars, fig.width = 7, fig.height = 3}
-stan_trace(fit)
+stan_trace(fit, pars = c("beta0", "beta1", "tau"))
 ```
+
+## Diagnostics: autocorrelation
+
+How correlated is each draw with a given lag along the Markov chain?
+
+<div class="centered">
+
+<img src="img/autocorr.png" width="280" />
+
+<font size="2">
+WoMMBAT: A user interface for hierarchical Bayesian estimation of working memory capacity.
+</font>
+</div>
 
 ## Diagnostics: autocorrelation
 
@@ -452,6 +510,11 @@ Life pro tip: use `log_sum_exp` wherever possible (and work with log probability
 
 ## Stochastic Variational Inference
 
+
+
+## Resources
+
+- Bayesian Data Analysis 3
 
 
 
