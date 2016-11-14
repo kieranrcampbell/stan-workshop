@@ -33,6 +33,31 @@ knitr::opts_chunk$set(echo = TRUE, fig.align='center',
 
 ## Modelling vs inference
 
+### Modelling
+
+- Think up mechanistic description of how the world works...
+- Consider measurement error and noise
+- Write down $p(\theta | X) \propto p(X|\theta)p(\theta)$
+- Iterate and profit
+
+
+### Inference
+
+- Traditionally complicated, error prone, can take months
+- Intellectually interesting...
+- ...but fundamentally says nothing about $\theta$
+- Worse, inference often affects modelling!
+
+
+## Hello, Stan!
+
+<center>
+<img src="img/stan.jpg" height="300" />
+</center>
+
+Stan is a _program_ (named after Stanislaw Ulam) to perform Bayesian inference using Hamiltonian Monte Carlo (HMC)
+
+$\rightarrow$ let's you focus on modelling and not worry (too much!) about inference
 
 ## Stan
 
@@ -445,23 +470,36 @@ stan_ac(fit, "lp__")
 stan_ac(fit)
 ```
 
-## Diagnostics: effective sample size
+## Diagnostics: MCSE
+
+Still trying to estimate $\hat{\theta}$ from a (finite) sample
+$\rightarrow$ Monte Carlo Standard Error (MCSE)
+
+Qn: how does the MCSE compare to the posterior variances?
+
+```{r stan-mcse, fig.width = 3, fig.height = 3}
+stan_mcse(fit)
+```
+
+
+## Diagnostics: ESS
+
+Given the draws aren't truly independent, what is the effective sample size (ESS)? (one for each parameter)
 
 ```{r stan-ess}
 stan_ess(fit)
 ```
 
-## Diagnostics: Monte carlo standard error
 
-```{r stan-mcse}
-stan_mcse(fit)
-```
+## Diagnostics: Gelman-Rubin R-hat
 
-## Diagnostics: Gelman's R-hat
+Ratio if within-to-between sample variance
 
 ```{r stan-rhat}
 stan_rhat(fit)
 ```
+
+If $\hat{R}$ is far from 1, more iterations may help
 
 
 ## Discrete parameters
@@ -510,11 +548,28 @@ Life pro tip: use `log_sum_exp` wherever possible (and work with log probability
 
 ## Stochastic Variational Inference
 
+```{r vb}
+fit_vb <- vb(linear_model, data = data_list)
+```
+
+## SVI (cont)
+
+```{r beta0vb}
+beta0_trace_vb <- rstan::extract(fit_vb, "beta0")$beta0
+beta0_map_vb <- mean(beta0_trace_vb)
+
+qplot(beta0_trace_vb, geom = 'density') +
+  geom_vline(xintercept = -1, colour = 'darkblue') +
+  geom_vline(xintercept = beta0_map_vb, colour = 'darkred')
+```
 
 
 ## Resources
 
 - Bayesian Data Analysis 3
+- (mc-stan.org)[https://mc-stan.org]
+- (Loo)[http://mc-stan.org/interfaces/loo.html] leave one out cross-validation
+- (Rstanarm)[http://mc-stan.org/interfaces/rstanarm.html] applied regression modelling
 
 
 
