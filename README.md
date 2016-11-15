@@ -60,4 +60,35 @@ Please install the following R packages:
 - Rstan
 - devtools
 
+### Getting the data
+
+For exercise three 3 you need some real single cell data from the [Pollen et al. 2014](http://www.nature.com/nbt/journal/v32/n10/abs/nbt.2967.html) dataset. This comes as part of the R pacakge in this github repo. To install enter the following commands in the R console:
+
+```{r installdata}
+devtools::install_github("kieranrcampbell/stan-workshop/standata") 
+```
+
+Once this is installed, you can load the data any time via
+
+```{r loaddata}
+library(standata)
+data(pollen2014)
+data(celllibraries)
+```
+
+`pollen2014` is a gene-by-cell matrix of expression measurements for ~8000 genes in 300 cells. `celllibraries` is a `data.frame` that includes cell names, cell types and clusters.
+
+*Tip:* when dealing with new data in RStudio, use the `View` command to easily explore, e.g. `View(pollen2014)` and `View(celllibs)`
+
+
+
+
+
+
+
+
+
+
+
+
 
