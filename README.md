@@ -73,12 +73,12 @@ Once this is installed, you can load the data any time via
 ```{r loaddata}
 library(standata)
 data(pollen2014)
-data(celllibraries)
+data(celllibs)
 ```
 
-`pollen2014` is a gene-by-cell matrix of expression measurements for ~8000 genes in 300 cells. `celllibraries` is a `data.frame` that includes cell names, cell types and clusters.
+`pollen2014` is a gene-by-cell matrix of expression measurements for ~8000 genes in 300 cells. `celllibs` is a `data.frame` that includes cell names, cell types and clusters.
 
-*Tip:* when dealing with new data in RStudio, use the `View` command to easily explore, e.g. `View(pollen2014)` and `View(celllibs)`
+**Tip:** when dealing with new data in RStudio, use the `View` command to easily explore, e.g. `View(pollen2014)` and `View(celllibs)`
 
 
 
