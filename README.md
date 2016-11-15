@@ -62,13 +62,13 @@ Please install the following R packages:
 
 ### Getting the data
 
-For exercise three 3 you need some real single cell data from the [Pollen et al. 2014](http://www.nature.com/nbt/journal/v32/n10/abs/nbt.2967.html) dataset. This comes as part of the R pacakge in this github repo. To install enter the following commands in the R console:
+For exercise 3 you need some real single cell data from the [Pollen et al. 2014](http://www.nature.com/nbt/journal/v32/n10/abs/nbt.2967.html) dataset. This comes as part of the R package in this github repo. To install enter the following commands in the R console:
 
 ```{r installdata}
 devtools::install_github("kieranrcampbell/stan-workshop/standata") 
 ```
 
-Once this is installed, you can load the data any time via
+Once this is installed you can load the data any time via
 
 ```{r loaddata}
 library(standata)
