@@ -1,0 +1,11 @@
+Package: standata
+Title: Single cell data for GMS Bayesian statistics module
+Version: 0.0.0.9000
+Authors@R: person("Kieran", "Campbell", email = "kieranc@well.ox.ac.uk", role = c("aut", "cre"))
+Description: Single cell data for GMS Bayesian statistics module
+Depends:
+    R (>= 3.3.1)
+License: 
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 5.0.1
