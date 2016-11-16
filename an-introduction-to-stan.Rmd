@@ -34,10 +34,13 @@ knitr::opts_chunk$set(echo = TRUE, fig.align='center',
 
 - Bayesian Statistics operates under a fundamentally different paradigm to classical (Frequentist) Statistics
 - Frequentist probability of an event occuring is given by the relative frequency in an infinite number of experiments
-- Frequentists have difficulty answering questions where experiments cannot be done, e.g. ``What is the probability that the world will end tomorrow?" 
+- Frequentists have difficulty answering questions where experiments cannot be done, e.g. *What is the probability that the world will end tomorrow?* or *What is the probability Trump will be elected president?* 
+
+## Brief Recap
+
 - Bayesian probability operates on a subjective belief basis: everything can be assigned a probability
 - That probability or belief might be personal to you
-- Is it a better paradigm? For many problems it is more flexible but certain types of ``M-open" problems (e.g. hypothesis testing) are trickier to handle. This is because Bayesian Statistics requires us to define the entire model space.
+- Is it a better paradigm? For many problems it is more flexible but certain types of *M-open* problems (e.g. hypothesis testing) are trickier to handle. This is because Bayesian Statistics requires us to define the entire model space.
 
 The posterior distribution of $\theta$ given $X$ is given by:
 
@@ -186,10 +189,9 @@ data {
 
 Many different data types:
 
-* `vector`
-* `cov_mat`
-
-etc
+* Standard: `real`, `vector`, `matrix`, etc
+* Constrained: `real<lower=0, upper=1>`
+* Structured: `cov_mat`, ordered vectors
 
 ## Constructing the model file: parameters
 
@@ -409,13 +411,18 @@ Love MCMC diagnostics? BDA3 11.4
 
 
 ## Practical MCMC diagnostics
-, in particular:
+
+Day-to-day _good enough_:
 
 - Traces of log-likelihood and parameters
 - Autocorrelation plots
 - Effective sample size
 - Monte Carlo standard error
 - Gelman's R-hat
+
+<div class="centered">
+**In practice, examining parameter traces and autocorrelation is usually sufficient**
+</div>
 
 ## Diagnostics: trace examination
 
@@ -586,7 +593,7 @@ qplot(beta0_trace_vb, geom = 'density') +
 
 ## Resources
 
-- Bayesian Data Analysis 3
+- Bayesian Data Analysis 3 (textbook)
 - [mc-stan.org](https://mc-stan.org)
 - [Loo](http://mc-stan.org/interfaces/loo.html) leave one out cross-validation
 - [Rstanarm](http://mc-stan.org/interfaces/rstanarm.html) applied regression modelling
