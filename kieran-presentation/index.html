@@ -152,6 +152,7 @@
 
 <ul>
 <li>Traditionally complicated, error prone, can take months</li>
+<li>Very rarely \(p(\theta | X)\) available in closed form: approximate inference (MCMC, VB, EP, etc&#8230;)</li>
 <li>Intellectually interesting&#8230;</li>
 <li>&#8230;but fundamentally says nothing about \(\theta\)</li>
 <li>Worse, inference often affects modelling!</li>
@@ -405,7 +406,7 @@ linear_model &lt;- stan_model(model_code = model_str)</pre>
 
 <p>Put data into list format:</p>
 
-<pre class = 'prettyprint lang-r'>data_list &lt;- list(x = x, y = y)</pre>
+<pre class = 'prettyprint lang-r'>data_list &lt;- list(N = length(y), x = x, y = y)</pre>
 
 <p>Inference using <code>sampling</code>:</p>
 
@@ -431,9 +432,9 @@ linear_model &lt;- stan_model(model_code = model_str)</pre>
 ## Chain 1, Iteration: 3200 / 4000 [ 80%]  (Sampling)
 ## Chain 1, Iteration: 3600 / 4000 [ 90%]  (Sampling)
 ## Chain 1, Iteration: 4000 / 4000 [100%]  (Sampling)
-##  Elapsed Time: 0.152556 seconds (Warm-up)
-##                0.155125 seconds (Sampling)
-##                0.307681 seconds (Total)
+##  Elapsed Time: 0.168416 seconds (Warm-up)
+##                0.175169 seconds (Sampling)
+##                0.343585 seconds (Total)
 ## 
 ## 
 ## SAMPLING FOR MODEL &#39;d286bea5be64d4f60da9f8f18551ab8a&#39; NOW (CHAIN 2).
@@ -450,9 +451,9 @@ linear_model &lt;- stan_model(model_code = model_str)</pre>
 ## Chain 2, Iteration: 3200 / 4000 [ 80%]  (Sampling)
 ## Chain 2, Iteration: 3600 / 4000 [ 90%]  (Sampling)
 ## Chain 2, Iteration: 4000 / 4000 [100%]  (Sampling)
-##  Elapsed Time: 0.156514 seconds (Warm-up)
-##                0.149097 seconds (Sampling)
-##                0.305611 seconds (Total)
+##  Elapsed Time: 0.166997 seconds (Warm-up)
+##                0.170728 seconds (Sampling)
+##                0.337725 seconds (Total)
 ## 
 ## 
 ## SAMPLING FOR MODEL &#39;d286bea5be64d4f60da9f8f18551ab8a&#39; NOW (CHAIN 3).
@@ -469,9 +470,9 @@ linear_model &lt;- stan_model(model_code = model_str)</pre>
 ## Chain 3, Iteration: 3200 / 4000 [ 80%]  (Sampling)
 ## Chain 3, Iteration: 3600 / 4000 [ 90%]  (Sampling)
 ## Chain 3, Iteration: 4000 / 4000 [100%]  (Sampling)
-##  Elapsed Time: 0.161065 seconds (Warm-up)
-##                0.151264 seconds (Sampling)
-##                0.312329 seconds (Total)
+##  Elapsed Time: 0.165873 seconds (Warm-up)
+##                0.156197 seconds (Sampling)
+##                0.32207 seconds (Total)
 ## 
 ## 
 ## SAMPLING FOR MODEL &#39;d286bea5be64d4f60da9f8f18551ab8a&#39; NOW (CHAIN 4).
@@ -488,9 +489,9 @@ linear_model &lt;- stan_model(model_code = model_str)</pre>
 ## Chain 4, Iteration: 3200 / 4000 [ 80%]  (Sampling)
 ## Chain 4, Iteration: 3600 / 4000 [ 90%]  (Sampling)
 ## Chain 4, Iteration: 4000 / 4000 [100%]  (Sampling)
-##  Elapsed Time: 0.17144 seconds (Warm-up)
-##                0.178687 seconds (Sampling)
-##                0.350127 seconds (Total)</pre>
+##  Elapsed Time: 0.174429 seconds (Warm-up)
+##                0.176195 seconds (Sampling)
+##                0.350624 seconds (Total)</pre>
 
 </article></slide><slide class=''><hgroup><h2>Inference (cont)</h2></hgroup><article  id="inference-cont" class="smaller ">
 
