@@ -67,6 +67,7 @@ The posterior is the probability distribution of those parameters (after seeing 
 ### Inference
 
 - Traditionally complicated, error prone, can take months
+- Very rarely $p(\theta | X)$ available in closed form: approximate inference (MCMC, VB, EP, etc...)
 - Intellectually interesting...
 - ...but fundamentally says nothing about $\theta$
 - Worse, inference often affects modelling!
@@ -342,7 +343,7 @@ complex_model <- stan_model("my_complex_model.stan")
 Put data into list format:
 
 ```{r data-to-list}
-data_list <- list(x = x, y = y)
+data_list <- list(N = length(y), x = x, y = y)
 ```
 
 Inference using `sampling`:
@@ -354,6 +355,7 @@ fit <- sampling(linear_model,
                 warmup = 2000, # How many iterations at beginning to ignore
                 chains = 4,  # Number of chains to sample
                 thin = 4) # Only keep every fourth sample
+
 ```
 
 ## Inference (cont)
