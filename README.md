@@ -94,6 +94,20 @@ Using the Cirrhosis death rate data, implement multiple linear regression in Sta
 
 Now extend your model to include Automatic Relevance Determination (Kieran will explain model). Does this change your interpretation at all?
 
+### 3. Count regression and generalized linear models
+
+What happens if the data isn't continuous? Here we consider count data. The issue is if we have a mean function $\beta_0 * x_1 + \beta_1 * x_2 + ...$ the mean can easily be negative but the data must be positive! How do we get round this using generalized linear models?
+
+As an example, we use the warpbreaks dataset built in to R, which can be loaded via `data(warpbreaks)`. Use the number of breaks as the dependent variable, and compare this to [standard glm](https://www.tutorialspoint.com/r/r_poisson_regression.htm).
+
+Note to get the design matrix into Stan you should call `model.matrix`, ie
+
+```{r dmat}
+model.matrix(breaks ~ wool + tension, data = warpbreaks)
+```
+
+
+
 
 
 
