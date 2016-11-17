@@ -7,6 +7,8 @@ Location: STRUBI Meeting Room, Wellcome Trust Centre for Human Genetics
 
 Instructors: Justina Zurauskiene (JZ), Kieran Campbell (KC), Christopher Yau (CY)
 
+[Slides](https://kieranrcampbell.github.io/stan-workshop/)
+
 ## Timetable
 
 *Thursday, 17 November, 2016*
