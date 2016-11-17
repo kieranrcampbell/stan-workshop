@@ -108,6 +108,24 @@ Note to get the design matrix into Stan you should call `model.matrix`, ie
 model.matrix(breaks ~ wool + tension, data = warpbreaks)
 ```
 
+### 4. Nonlinear regression modelling of gene expression data
+
+Have a quick read of [this preprint](https://www.dropbox.com/s/zndwrdgvv9obf3g/main.pdf?dl=0). In particular familiarise yourself with the concept of pseudotime and a nonlinear function of gene expression across pseudotime, given by the sigmoid.
+
+To get some real expression data, install `modelselectionworkshop` via
+
+```{r msw}
+devtools::install:github("kieranrcampbell/modelselectionworkshop")
+```
+
+This contains a gene-by-cell expression matrix `X` and pseudotime vector `pseudotime` for 500 genes and 155 cells. 
+
+Can you
+
+a) Implement a Bayesian version of this model for inference of the sigmoid parameters
+b) Pick out genes with interesting behaviour (large k, t0 in a particular time)
+c) Implement zero-inflation (hard)
+
 
 
 
