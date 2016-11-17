@@ -82,7 +82,17 @@ data(celllibs)
 
 
 
+## Practical
 
+### 1. Basic linear regression
+
+As per the lecture, reimplement the basic linear regression from simulated $y$ and $x$, and check model diagnostics. Play around with the priors on $\beta_1$ - how strong does the prior have to be to have an effect? How does this change with the number of data samples?
+
+### 2. Multiple linear regression
+
+Using the Cirrhosis death rate data, implement multiple linear regression in Stan. Try to interperet the posterior parameter estimates - is there a similarity to frequentist hypothesis testing here? Compare to a frequentist model using `lm`.
+
+Now extend your model to include Automatic Relevance Determination (Kieran will explain model). Does this change your interpretation at all?
 
 
 
