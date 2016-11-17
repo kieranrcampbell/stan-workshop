@@ -123,7 +123,9 @@ This contains a gene-by-cell expression matrix `X` and pseudotime vector `pseudo
 Can you
 
 a) Implement a Bayesian version of this model for inference of the sigmoid parameters
+
 b) Pick out genes with interesting behaviour (large k, t0 in a particular time)
+
 c) Implement zero-inflation (hard)
 
 
